@@ -1,4 +1,9 @@
-# Reproducible Research: Peer Assessment 1
+---
+title: "Reproducible Research: Peer Assessment 1"
+output: 
+  html_document:
+    keep_md: true
+---
 
 This R markdown script is the solution for assignment one of the Reproducible research course at Coursera.
 The instructions and questions to be answered can be found in the [readme](https://github.com/ThomasMey123/RepData_PeerAssessment1/blob/master/README.md)
@@ -12,6 +17,8 @@ library(data.table)
 ```
 
 ```
+## data.table 1.9.4  For help type: ?data.table
+## *** NB: by=.EACHI is now explicit. See README to restore previous behaviour.
 ## 
 ## Attaching package: 'data.table'
 ## 
@@ -63,7 +70,7 @@ par(mfrow=c(1,1))
 plotHistoramWithMedianAndMean(md,"Histogram of steps summed per day")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
 
 
 ## What is the average daily activity pattern?
@@ -97,7 +104,7 @@ maxInt<- paste(sprintf("%02d",as.integer((maxInterval$interval/100))) ,
 legend("topright", pch = "-", col=c("blue"), legend=paste0("Maximal number of steps at ",maxInt))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
 
 ## Imputing missing values
 The strategy for imputing the missing values is to replace it with the average value for the interval calculated in the previous step.  
@@ -136,7 +143,7 @@ plotHistoramWithMedianAndMean(md,"Histogram of steps summed per day")
 plotHistoramWithMedianAndMean(md2,"Histogram of steps summed per day with imputed data")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
+![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png) 
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
@@ -175,7 +182,7 @@ xyplot(meanPerInterval ~ interval | day,
        xaxp= c(0,24,8))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
+![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png) 
   
 As required the above uses the interval which causes the straight sections since there are data gaps, e.g. 0850,0855,0900,...  
 Nevertheless the figure shows a siginficant difference between weekdays and weekend.
