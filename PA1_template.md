@@ -1,9 +1,4 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 This R markdown script is the solution for assignment one of the Reproducible research course at Coursera.
 The instructions and questions to be answered can be found in the [readme](https://github.com/ThomasMey123/RepData_PeerAssessment1/blob/master/README.md)
@@ -11,8 +6,21 @@ The instructions and questions to be answered can be found in the [readme](https
 ## Loading and preprocessing the data
 The scipt assumes that you change your working directory to the downloaded files and the zip-File is already downloaded.  
 With the following commands the file is unzipped, read and converted to a table.
-```{r echo=TRUE }
+
+```r
 library(data.table)
+```
+
+```
+## 
+## Attaching package: 'data.table'
+## 
+## The following object is masked _by_ '.GlobalEnv':
+## 
+##     .N
+```
+
+```r
 library(knitr)
 opts_chunk$set(echo=TRUE)
 
@@ -26,7 +34,8 @@ md <-data.table(md)
 
 ## What is mean total number of steps taken per day?
 
-```{r}
+
+```r
 #Since the histogram will be plotted several times with similar parameters a function is defined here for later use 
 
 plotHistoramWithMedianAndMean <- function(m, title) {
@@ -54,9 +63,12 @@ par(mfrow=c(1,1))
 plotHistoramWithMedianAndMean(md,"Histogram of steps summed per day")
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
+
 
 ## What is the average daily activity pattern?
-```{r}
+
+```r
 # The intervals contain gaps, since they are in the format hhmm, e.g. 850,855,900,905
 # To get an even spacing of measures against the interval, convert the intervals to hours as floating point numbers
 
@@ -85,16 +97,24 @@ maxInt<- paste(sprintf("%02d",as.integer((maxInterval$interval/100))) ,
 legend("topright", pch = "-", col=c("blue"), legend=paste0("Maximal number of steps at ",maxInt))
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
+
 ## Imputing missing values
 The strategy for imputing the missing values is to replace it with the average value for the interval calculated in the previous step.  
 First let's check the number of NAs.
-```{r fig.height=8}
+
+```r
 #calculate the number of NAs
 nrow(md[is.na(md$steps),])
 ```
 
+```
+## [1] 2304
+```
 
-```{r fig.height=8}
+
+
+```r
 # in copy table to a new variable 
 md2<-md
 
@@ -108,20 +128,30 @@ md2[md2$stepsIsNA]$steps<-md2[md2$stepsIsNA]$meanPerInterval
 ```
 
 Draw two histograms with the mean and median for the original and imputed data.
-```{r fig.height=8}
+
+```r
 #plot a diagram with with and median 
 par(mfrow=c(2,1))
 plotHistoramWithMedianAndMean(md,"Histogram of steps summed per day")
 plotHistoramWithMedianAndMean(md2,"Histogram of steps summed per day with imputed data")
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
+
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```{r}
+
+```r
 #First set the locale to english
 Sys.setlocale("LC_TIME", "English")
+```
 
+```
+## [1] "English_United States.1252"
+```
+
+```r
 #As Saturday and Sunday are the only days starting with an "S" use that as discriminator for a boolean
 isWeekend<-substr(weekdays(as.Date(md$date)),1,1)=="S"
 
@@ -130,6 +160,13 @@ md$day<- factor( ifelse(isWeekend, "weekend", "weekday"),levels=c("weekend","wee
 
 #Build means and plot
 library(lattice)
+```
+
+```
+## Warning: package 'lattice' was built under R version 3.1.3
+```
+
+```r
 meansPerInterval<-md[, list(meanPerInterval=mean(steps,na.rm=TRUE)), by=c("interval","day")]
 xyplot(meanPerInterval ~ interval | day, 
        data = meansPerInterval, 
@@ -137,6 +174,8 @@ xyplot(meanPerInterval ~ interval | day,
        ylab="Mean number of steps",  
        xaxp= c(0,24,8))
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
   
 As required the above uses the interval which causes the straight sections since there are data gaps, e.g. 0850,0855,0900,...  
 Nevertheless the figure shows a siginficant difference between weekdays and weekend.
